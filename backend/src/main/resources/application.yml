@@ -1,0 +1,110 @@
+# =============================================
+#  CampusFlow 360 – Application Configuration
+# =============================================
+spring:
+  application:
+    name: campusflow360-api
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+---
+# ==================== DEV (H2 em memória) ====================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:h2:mem:campusflowdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    com.campusflow: DEBUG
+
+---
+# ==================== PROD (PostgreSQL / Railway) ====================
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    # Railway injeta DATABASE_URL no formato postgresql://user:pass@host:port/db
+    # O Spring precisa do formato jdbc:postgresql://
+    url: ${JDBC_DATABASE_URL:${DATABASE_URL}}
+    username: ${PGUSER:${DATABASE_USER:campusflow}}
+    password: ${PGPASSWORD:${DATABASE_PASSWORD:changeme}}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+  # Desabilita H2 em produção
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    com.campusflow: INFO
+    org.hibernate.SQL: WARN
+
+# =============================================
+#  Springdoc / Swagger
+# =============================================
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    tags-sorter: alpha
+  default-produces-media-type: application/json
+
+# =============================================
+#  Actuator (health check Railway)
+# =============================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never

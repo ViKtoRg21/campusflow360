@@ -1,0 +1,10 @@
+[build]
+builder = "nixpacks"
+
+# Railway usa este arquivo detectando que está na pasta backend/
+[deploy]
+startCommand = "java -Dspring.profiles.active=prod -Dserver.port=$PORT -jar target/*.jar"
+healthcheckPath = "/actuator/health"
+healthcheckTimeout = 120
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
