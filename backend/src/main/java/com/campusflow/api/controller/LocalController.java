@@ -32,4 +32,23 @@ public class LocalController {
     public Local criar(@RequestBody Local local) {
         return localRepository.save(local);
     }
+
+    @PutMapping("/{id}")
+    public Local atualizar(@PathVariable Long id, @RequestBody Local dados) {
+        var local = localRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Local", id));
+        local.setNome(dados.getNome());
+        if (dados.getBloco() != null)     local.setBloco(dados.getBloco());
+        if (dados.getAndar() != null)     local.setAndar(dados.getAndar());
+        if (dados.getDescricao() != null) local.setDescricao(dados.getDescricao());
+        return localRepository.save(local);
+    }
+
+    @DeleteMapping("/{id}")
+    public void desativar(@PathVariable Long id) {
+        var local = localRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Local", id));
+        local.setAtivo(false);
+        localRepository.save(local);
+    }
 }
