@@ -97,20 +97,6 @@ export default function LoginPage() {
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
-
-          {/* Demo users */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-400 mb-3 text-center">Acesso rápido (ambiente dev)</p>
-            <div className="grid grid-cols-2 gap-2">
-              {DEMO_USERS.map(u => (
-                <button key={u.email} onClick={() => fillDemo(u)}
-                  className="text-left px-3 py-2 bg-gray-50 hover:bg-brand-50 hover:border-brand-200 border border-gray-100 rounded-lg transition-all">
-                  <p className="text-xs font-medium text-gray-700">{u.label}</p>
-                  <p className="text-xs text-gray-400 truncate">{u.email}</p>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>
