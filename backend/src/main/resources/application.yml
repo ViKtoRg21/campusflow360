@@ -51,8 +51,8 @@ spring:
 
   datasource:
     # Railway injeta DATABASE_URL no formato postgresql://user:pass@host:port/db
-    # Prefixamos com jdbc: para compatibilidade com Spring/HikariCP
-    url: jdbc:${DATABASE_URL:postgresql://localhost:5432/campusflowdb}
+    # O Spring precisa do formato jdbc:postgresql://
+    url: jdbc:${DATABASE_URL}
     username: ${PGUSER:${DATABASE_USER:campusflow}}
     password: ${PGPASSWORD:${DATABASE_PASSWORD:changeme}}
     hikari:
