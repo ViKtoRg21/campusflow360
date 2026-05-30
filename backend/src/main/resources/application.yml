@@ -49,18 +49,12 @@ spring:
     activate:
       on-profile: prod
 
-  datasource:
-    # Railway injeta DATABASE_URL no formato postgresql://user:pass@host:port/db
-    # O Spring precisa do formato jdbc:postgresql://
-    url: jdbc:${DATABASE_URL}
-    username: ${PGUSER:${DATABASE_USER:campusflow}}
-    password: ${PGPASSWORD:${DATABASE_PASSWORD:changeme}}
+ datasource:
+    url: jdbc:${DB_URL}
     hikari:
-      maximum-pool-size: 5
+      maximum-pool-size: 3
       minimum-idle: 1
       connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
